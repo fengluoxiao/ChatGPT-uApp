@@ -1,0 +1,83 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "uni-app",
+				"navigationStyle": "custom",
+"app-plus":{
+            "bounce":"none" // 将回弹属性关掉
+        }
+			}
+		},
+		{
+			"path": "pages/test/test",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			
+			}
+			},
+			{
+				"path": "pages/chat/index",
+				"style": {
+					"navigationBarTitleText": "uni-app",
+					"navigationStyle": "custom"
+				}
+				},
+		{
+            "path" : "pages/settings/settings",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+
+            }
+            
+        },
+		{
+            "path" : "pages/login/login",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+		
+
+    ],
+	"tabBar": {
+		"list": [
+			{
+				"pagePath": "pages/index/index",
+				"iconPath": "static/logo.png",
+				"selectedIconPath": "static/logo.png"
+			},
+			{
+				"pagePath": "pages/settings/settings",
+				"iconPath": "static/logo.png",
+				"selectedIconPath": "static/logo.png"
+			}
+		]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#fff",
+		"backgroundColor": "#fff",
+		"usingComponents": {
+			
+		}
+	},
+	"uniIdRouter": {},
+	"easycom": {
+			"autoscan": true,
+			"custom": {
+				"van-(.*)": "@/wxcomponents/vant/$1/index.vue",
+				"^u-(.*)": "@/uni_modules/uview-ui/components/u-$1/u-$1.vue",
+				"tui-(.*)": "@/components/thorui/tui-$1/tui-$1.vue"
+			}
+		}
+}
