@@ -40,14 +40,204 @@
 			</view>
 			<view class="oper flex-row" @tap.prevent.stop="" >
 				<view class="" style="display: flex;justify-content: center;padding: 0 100rpx;width: 100%;">
-					 <u-icon name="list-dot" color="#000" size="32"></u-icon>
+					 <u-icon name="list-dot" color="#000" size="32" @click="openDrawer"></u-icon>
 					<input v-if="isEdit" @focus="inputFcus" :focus="isFocus" :cursor-spacing="8" :adjust-position="false" type="text" v-model="content" class="input" placeholder="请输入内容"/>
 					<!--发送-->
 					<view @touchend.prevent="send"  class="btn">发送</view>
 				</view>
 				
 			</view>
-			<tui-tabbar :current="current" :unlined="true" :isFixed="true" backdropFilter backgroundColor="rgba(255, 255, 255, 0.7)" :tabBar="tabBar" color="#777" selectedColor="#AC9157" @click="tabbarSwitch"></tui-tabbar>
+			<tui-tabbar :current="current" :unlined="true"  :isFixed="true" backdropFilter backgroundColor="rgba(255, 255, 255, 0.7)" :tabBar="tabBar" color="#777" selectedColor="#AC9157" @click="tabbarSwitch"></tui-tabbar>
+	<!-- 		<tui-bottom-popup mask :zIndex="99999999" :maskZIndex="9999999" :show="popupShow" @close="popup" :height="500">
+				
+				<view style="height: 500rpx;padding: 20rpx;">
+				
+				   <tui-dropdown-list :show="dropdownShow" :top="94" >
+				    	<template v-slot:selectionbox>
+				    		<view class="" style="padding: 20rpx;">
+								<tui-row marginBottom="10px" :isFlex="true" justify="space-around" :gutter ="0">
+									<tui-col>
+										<view class="tui-col__demo tui-yellow">ssss</view>
+									</tui-col>
+									<tui-col>
+										<view class="" @click.stop="openSelect" style="float: right;">
+											{{model}}bb
+										</view>
+									</tui-col>
+								</tui-row>
+				    			
+				    		</view>
+				    	</template>
+				    	<template v-slot:dropdownbox style="">
+				    		<view class="" style="">
+								<tui-row marginBottom="10px" :isFlex="true" justify="space-around" :gutter ="0">
+									<tui-col>
+										
+									</tui-col>
+									<tui-col>
+										<view class="" style="position: absolute;right: 0;">
+											
+												sasapshsasasass
+										
+										</view>
+									</tui-col>
+								</tui-row>
+				    			
+				    		</view>
+				    	</template>
+				    </tui-dropdown-list>
+				</view>
+			</tui-bottom-popup> -->
+			<view>
+				<fui-bottom-popup :show="popupShow" @close="closePopup" zIndex="9999999999" maskClosable>
+					<view class="fui-custom__wrap" style="height: 500rpx;display: flex;padding: 20rpx;flex-direction: column;">
+						<tui-dropdown-list :show="dropdownShowForModel" :top="70" :height="500">
+						 	<template v-slot:selectionbox>
+						 		<view class="" >
+									<tui-row marginBottom="10px" :isFlex="true" justify="space-around" :gutter ="0">
+										<tui-col>
+											<view class="tui-col__demo tui-yellow">已选择的模型：{{model}}</view>
+										</tui-col>
+										<tui-col>
+											<view class="" @click="openSelect(0)" style="float: right;padding: 10rpx 40rpx;border: 1px solid #eee;text-align: center;">
+												{{model}}
+											</view>
+										</tui-col>
+									</tui-row>
+						 			
+						 		</view>
+						 	</template>
+						 	<template v-slot:dropdownbox style="">
+						 		<view class="" style="">
+									<tui-row marginBottom="10px" :isFlex="true" justify="space-around" :gutter ="30">
+										<tui-col>
+											
+										</tui-col>
+										<tui-col>
+											<view class="" style="float: right;border: #eee 1px solid;background-color: #fff;" v-for="(item,index) in choModel" >
+													<view class="" style="border: #eee 1px solid;width: 300rpx;display: flex;justify-content: center;">
+														<view class="" @click.stop="changeModel(index)">
+															{{item}}
+														</view>
+													</view>
+											</view>
+										</tui-col>
+									</tui-row>
+		
+						 		</view>
+						 	</template>
+						 </tui-dropdown-list>
+				<tui-dropdown-list :show="dropdownShowForToken" :top="94" :height="500">
+					<template v-slot:selectionbox>
+						<view class="" >
+							<tui-row marginBottom="10px" :isFlex="true" justify="space-around" :gutter ="0">
+								<tui-col>
+									<view class="tui-col__demo tui-yellow">ssss</view>
+								</tui-col>
+								<tui-col>
+									<view class="" @click="openSelect(1)" style="float: right;padding: 10rpx 40rpx;border: 1px solid #eee;text-align: center;">
+										{{model}}bb
+									</view>
+								</tui-col>
+							</tui-row>
+							
+						</view>
+					</template>
+					<template v-slot:dropdownbox style="">
+						<view class="" style="">
+						<tui-row marginBottom="10px" :isFlex="true" justify="space-around" :gutter ="30">
+							<tui-col>
+								
+							</tui-col>
+							<tui-col>
+								<view class="" style="position: absolute;right: 0;">
+									
+										sasapshsasasass
+								
+								</view>
+							</tui-col>
+						</tui-row>
+								
+							</view>
+						</template>
+					 </tui-dropdown-list>
+					</view>
+				</fui-bottom-popup>
+			<!-- 		<u-popup :show="popupShow" @close="close" :customStyle="{height: '200rpx'}" :zIndex="9999999999999" safeAreaInsetBottom round="20">
+			            <view style="height: 500rpx;padding: 30rpx;">
+						
+			               <tui-dropdown-list :show="dropdownShow" :top="94" :height="500">
+			                	<template v-slot:selectionbox>
+			                		<view class="" >
+										<tui-row marginBottom="10px" :isFlex="true" justify="space-around" :gutter ="0">
+											<tui-col>
+												<view class="tui-col__demo tui-yellow">ssss</view>
+											</tui-col>
+											<tui-col>
+												<view class="" @click="openSelect" style="float: right;padding: 10rpx 40rpx;border: 1px solid #eee;text-align: center;">
+													{{model}}bb
+												</view>
+											</tui-col>
+										</tui-row>
+			                			
+			                		</view>
+			                	</template>
+			                	<template v-slot:dropdownbox style="">
+			                		<view class="" style="">
+										<tui-row marginBottom="10px" :isFlex="true" justify="space-around" :gutter ="30">
+											<tui-col>
+												
+											</tui-col>
+											<tui-col>
+												<view class="" style="position: absolute;right: 0;">
+													
+														sasapshsasasass
+												
+												</view>
+											</tui-col>
+										</tui-row>
+			                			
+			                		</view>
+			                	</template>
+			                </tui-dropdown-list>
+							<tui-dropdown-list :show="dropdownShow" :top="94" :height="500">
+							 	<template v-slot:selectionbox>
+							 		<view class="" >
+										<tui-row marginBottom="10px" :isFlex="true" justify="space-around" :gutter ="0">
+											<tui-col>
+												<view class="tui-col__demo tui-yellow">ssss</view>
+											</tui-col>
+											<tui-col>
+												<view class="" @click="openSelect" style="float: right;padding: 10rpx 40rpx;border: 1px solid #eee;text-align: center;">
+													{{model}}bb
+												</view>
+											</tui-col>
+										</tui-row>
+							 			
+							 		</view>
+							 	</template>
+							 	<template v-slot:dropdownbox style="">
+							 		<view class="" style="">
+																	<tui-row marginBottom="10px" :isFlex="true" justify="space-around" :gutter ="30">
+																		<tui-col>
+																			
+																		</tui-col>
+																		<tui-col>
+																			<view class="" style="position: absolute;right: 0;">
+																				
+																					sasapshsasasass
+																			
+																			</view>
+																		</tui-col>
+																	</tui-row>
+							 			
+							 		</view>
+							 	</template>
+							 </tui-dropdown-list>
+			            </view>
+					</u-popup> -->
+					<u-button @click="show = true">打开</u-button>
+				</view>
 		</view>
 	
 
@@ -56,11 +246,18 @@
 <script>
 import tuiButton from "@/components/thorui/tui-button/tui-button.vue"
 import tuiTabbar from "@/components/thorui/tui-tabbar/tui-tabbar.vue"
+import tuiDrawer from "@/components/thorui/tui-drawer/tui-drawer.vue"
+import tuiDropdownList from "@/components/thorui/tui-dropdown-list/tui-dropdown-list.vue"
+import tuiBottomPopup from "@/components/thorui/tui-bottom-popup/tui-bottom-popup.vue"
+import tuiCol from "@/components/thorui/tui-col/tui-col.vue"
+import tuiRow from "@/components/thorui/tui-row/tui-row.vue"
+import fuiBottomPopup from "@/components/firstui/fui-bottom-popup/fui-bottom-popup.vue"
 export default{
 	
 	data(){
 		
 		return {
+			popup: 'height: 500rpx',
 			tabBar: [
 				{
 					pagePath: '/pages/index/index',
@@ -91,12 +288,25 @@ export default{
 			toUserName: '',
 			isLogin: false,
 			value: 0,
-			current: 0
+			current: 0,
+			visible: false,
+			model: 'text-davinci-003',
+			choModel: ['text-ada-001','text-babbage-001','text-curie-001','text-davinci-003'],
+			dropdownShowForModel: false,
+			dropdownShowForToken: false,
+			popupShow: false
+			
 		}
 	},
 	components:{
 			tuiButton,
-			tuiTabbar
+			tuiTabbar,
+			tuiDrawer,
+			tuiDropdownList,
+			tuiBottomPopup,
+			tuiCol,
+			tuiRow,
+			fuiBottomPopup
 		},
 	onLoad(option){
 		// 初始化内容高度
@@ -113,6 +323,9 @@ export default{
 		} else {
 			this.isLogin = false
 		}
+		if(uni.getStorageSync("defaultModel")) {
+			this.model = uni.getStorageSync("defaultModel").text
+		}
 	},
 	onShow() {
 		if(uni.getStorageSync('chat_key')) {
@@ -120,9 +333,12 @@ export default{
 		} else {
 			this.isLogin = false
 		}
+		if(uni.getStorageSync("defaultModel")) {
+			this.model = uni.getStorageSync("defaultModel").text
+		}
 	},
 	onHide(){
-		innerAudioContext.stop()
+		
 	},
 	onBackPress(){
 		if(this.showFile || this.showEmoji){
@@ -134,6 +350,30 @@ export default{
 		return false
 	},
 	methods: {
+		changeModel(index) {
+			console.log(index,'changeModel')
+			console.log(this.choModel[index],'hhh')
+			this.model = this.choModel[index]
+			this.dropdownShowForModel = false
+		},
+		openSelect(index) {
+			if(index == 0) {
+				this.dropdownShowForModel = !this.dropdownShowForModel
+				this.dropdownShowForToken = false
+			}
+			if(index == 1) {
+				this.dropdownShowForToken = !this.dropdownShowForToken
+				this.dropdownShowForModel = false
+			}
+		},
+		openDrawer() {
+			this.popupShow = !this.popupShow
+		},
+		closePopup() {
+			this.popupShow = false
+			this.dropdownShowForToken = false
+			this.dropdownShowForModel = false
+		},
 		tabbarSwitch(e) {
 			console.log(e,'e')
 			uni.switchTab({
@@ -229,7 +469,7 @@ export default{
 					},
 					method:'POST',
 					data: {
-						"model": "text-davinci-003",
+						"model": this.model,
 						"prompt": content,
 						  "max_tokens": 2500,
 					},
@@ -280,7 +520,9 @@ export default{
 	}
 	uni-view {
 		display: inline;
-		
+	}
+	.popup {
+		height:500rpx
 	}
 	.tabbar {
 		height: 100rpx;
