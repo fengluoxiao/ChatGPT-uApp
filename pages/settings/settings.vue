@@ -58,9 +58,25 @@
 			    	</view>
 					
 			    </u-cell>
-			  
+			  <u-cell isLink @click="openSheet(1)">
+			  	<view
+			  	    slot="title"
+			  	    class="u-slot-title"
+			  	>
+			  	<view  class="" style="display: flex;flex-direction: row;align-items: center">
+			  		<image src="../../static/img/e3d955c27d7943b9832e0f35d50f5193.png" mode="aspectFill" style="height: 50px;width: 50px;"></image>
+			  			<view class="" style="width: 200px;margin-left: 20rpx;">
+			  			清除chat_key
+			  		</view>
+			  		
+			  	</view>
+			  	
+			  	</view>
+			  	
+			  </u-cell>
 			</u-cell-group>
 			<fui-actionsheet @click="changeDefaultModel" :show="showModelAction" :tips="tips" :itemList="modelAction" maskClosable @cancel="showModelAction = false" zIndex="99999999"></fui-actionsheet>
+			<fui-actionsheet @click="clearKey" :show="showModelActionForCLear" :tips="tipsForClear" :itemList="clearAction" maskClosable @cancel="showModelActionForCLear = false" zIndex="99999999"></fui-actionsheet>
 			<tui-tabbar :current="current" :unlined="true" :isFixed="true" backdropFilter backgroundColor="rgba(255, 255, 255, 0.7)" :tabBar="tabBar" color="#777" selectedColor="#AC9157" @click="tabbarSwitch"></tui-tabbar>
 		</view>
 	</view>
@@ -76,13 +92,18 @@
 		data() {
 			return {
 				showModelAction: false,
+				showModelActionForCLear: false,
 				tips: '请选择对话模型',
+				tipsForClear: '请确认删除',
 				modelAction: [
 					{text:'text-ada-001'},
 					{text:'text-babbage-001'},
 					{text:'text-curie-001'},
 					{text:'text-davinci-003'},
 					],
+					clearAction: [
+						{text:'是'},
+						],
 				tabBar: [
 					{
 						pagePath: '/pages/index/index',
@@ -130,6 +151,13 @@
 			}
 		},
 		methods: {
+			clearKey(e) {
+				uni.removeStorageSync('chat_key')
+				uni.showToast({
+					icon: 'success',
+					title: '删除成功'
+				})
+			},
 			changeDefaultModel(model) {
 				console.log(model,'model')
 				this.defaultModel = model.text
@@ -149,6 +177,9 @@
 			openSheet(index) {
 				if(index == 0) {
 					this.showModelAction = true
+				}
+				if(index == 1) {
+					this.showModelActionForCLear = true
 				}
 			},
 			getuserinfo(res) {

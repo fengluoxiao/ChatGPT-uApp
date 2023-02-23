@@ -5,15 +5,16 @@
 			ChatGPT
 		</view>
 		<view class=""  v-if="isLogin == true" style="position: relative;top: 120rpx;" :style="{height: scrollHeight}">
-			<view class="scroll" >
-					<scroll-view :scroll-into-view="scrollViewId" scroll-y style="height: 2000rpx;padding-bottom: 210rpx;">
+			<view class="scroll" :style="{height: scrollHeight}">
+					<scroll-view :scroll-into-view="scrollViewId" scroll-y style="height: 1;padding-bottom: 210rpx;">
 						<view class="item-space"></view>
 						<view v-for="(item, index) in list" :key="index" >
 							<!--撤销-->
 							<view class="item flex-row" :class="[item.source == fromUserId ? 'right' : 'left']">
 								<!--处理头像-->
 								<view>
-									<image  src="@/static/img/e3d955c27d7943b9832e0f35d50f5193.png" class="face"></image>
+									<image v-if="item.source" src="@/static/img/e3d955c27d7943b9832e0f35d50f5193.png" class="face"></image>
+									<image v-else src="@/static/logo.png" class="face"></image>
 								</view>
 								<view >
 									<image v-if="item.toUserFace || item.userFace" src="item.toUserFace || item.userFace" class="face"></image>
@@ -30,67 +31,25 @@
 						
 					</scroll-view>
 				</view>
-			</view>
-			<view class="" v-if="isLogin == false">
-				<view class="sssss" style="margin-top: 50vh;display: flex;justify-content: center;">
-					<view class="">
-						<tui-button width="220rpx" @click="toLogin">登录</tui-button>
+				<view class="oper flex-row" @tap.prevent.stop="" >
+					<view class="" style="display: flex;justify-content: center;padding: 0 100rpx;width: 100%;">
+						 <u-icon name="list-dot" color="#000" size="32" @click="openDrawer"></u-icon>
+						<input v-if="isEdit" @focus="inputFcus" :focus="isFocus" :cursor-spacing="8" :adjust-position="false" type="text" v-model="content" class="input" placeholder="请输入内容"/>
+						<!-- <view @touchend.prevent="send"  class="btn">发送</view> -->
+						<tui-button width="140rpx" height="70rpx" type="green" shape bold @click="send">发送</tui-button>
 					</view>
-				</view>
-			</view>
-			<view class="oper flex-row" @tap.prevent.stop="" >
-				<view class="" style="display: flex;justify-content: center;padding: 0 100rpx;width: 100%;">
-					 <u-icon name="list-dot" color="#000" size="32" @click="openDrawer"></u-icon>
-					<input v-if="isEdit" @focus="inputFcus" :focus="isFocus" :cursor-spacing="8" :adjust-position="false" type="text" v-model="content" class="input" placeholder="请输入内容"/>
-					<!--发送-->
-					<view @touchend.prevent="send"  class="btn">发送</view>
+					
 				</view>
 				
 			</view>
 			<tui-tabbar :current="current" :unlined="true"  :isFixed="true" backdropFilter backgroundColor="rgba(255, 255, 255, 0.7)" :tabBar="tabBar" color="#777" selectedColor="#AC9157" @click="tabbarSwitch"></tui-tabbar>
-	<!-- 		<tui-bottom-popup mask :zIndex="99999999" :maskZIndex="9999999" :show="popupShow" @close="popup" :height="500">
-				
-				<view style="height: 500rpx;padding: 20rpx;">
-				
-				   <tui-dropdown-list :show="dropdownShow" :top="94" >
-				    	<template v-slot:selectionbox>
-				    		<view class="" style="padding: 20rpx;">
-								<tui-row marginBottom="10px" :isFlex="true" justify="space-around" :gutter ="0">
-									<tui-col>
-										<view class="tui-col__demo tui-yellow">ssss</view>
-									</tui-col>
-									<tui-col>
-										<view class="" @click.stop="openSelect" style="float: right;">
-											{{model}}bb
-										</view>
-									</tui-col>
-								</tui-row>
-				    			
-				    		</view>
-				    	</template>
-				    	<template v-slot:dropdownbox style="">
-				    		<view class="" style="">
-								<tui-row marginBottom="10px" :isFlex="true" justify="space-around" :gutter ="0">
-									<tui-col>
-										
-									</tui-col>
-									<tui-col>
-										<view class="" style="position: absolute;right: 0;">
-											
-												sasapshsasasass
-										
-										</view>
-									</tui-col>
-								</tui-row>
-				    			
-				    		</view>
-				    	</template>
-				    </tui-dropdown-list>
-				</view>
-			</tui-bottom-popup> -->
+			
 			<view>
 				<fui-bottom-popup :show="popupShow" @close="closePopup" zIndex="9999999999" maskClosable>
 					<view class="fui-custom__wrap" style="height: 500rpx;display: flex;padding: 20rpx;flex-direction: column;">
+						<view class="" style="text-align: center;padding-bottom: 50rpx;">
+							本次对话设置
+						</view>
 						<tui-dropdown-list :show="dropdownShowForModel" :top="70" :height="500">
 						 	<template v-slot:selectionbox>
 						 		<view class="" >
@@ -132,11 +91,11 @@
 						<view class="" >
 							<tui-row marginBottom="10px" :isFlex="true" justify="space-around" :gutter ="0">
 								<tui-col>
-									<view class="tui-col__demo tui-yellow">ssss</view>
+									<view class="tui-col__demo tui-yellow">已选择的token数：{{chooseToken}}</view>
 								</tui-col>
 								<tui-col>
 									<view class="" @click="openSelect(1)" style="float: right;padding: 10rpx 40rpx;border: 1px solid #eee;text-align: center;">
-										{{model}}bb
+										{{chooseToken}}
 									</view>
 								</tui-col>
 							</tui-row>
@@ -149,94 +108,53 @@
 							<tui-col>
 								
 							</tui-col>
-							<tui-col>
-								<view class="" style="position: absolute;right: 0;">
+							<view class="" style="">
+								<tui-row marginBottom="10px" :isFlex="true" justify="space-around" :gutter ="30">
+									<tui-col>
+										
+									</tui-col>
+									<tui-col>
+										<view class="" style="float: right;border: #eee 1px solid;background-color: #fff;" v-for="(item,index) in tokens" >
+												<view class="" style="border: #eee 1px solid;width: 300rpx;display: flex;justify-content: center;">
+													<view class="" @click.stop="changeToken(index)">
+														{{item.num}}（{{item.desc}}）
+													</view>
+												</view>
+												
+										</view>
+										<view class="" style="border: #eee 1px solid;width: 264rpx;padding: 0 20rpx;display: inline-block;">
+											<view class="" style="display: flex;">
+												<view class="" style="display: inline;">
+													自定
+												</view>
+												<input type="text" style="width: 100rpx;margin-left: 20rpx;" @input="customToken" :value="inputToken">
+											</view>
+											<view class="" style="display: flex;height: 30rpx;justify-content: center;margin: 10rpx 0;">
+												<tui-button width="100rpx" height="30rpx" type="green" shape bold @click="customTokenInput" size="10">确定</tui-button>
+											</view>
+										</view>
+									</tui-col>
+								</tui-row>
 									
-										sasapshsasasass
-								
-								</view>
-							</tui-col>
+							</view>
 						</tui-row>
 								
 							</view>
 						</template>
 					 </tui-dropdown-list>
 					</view>
+					<view class="" style="display: flex;justify-content: center;margin-bottom: 20rpx;">
+						<tui-button width="400rpx" height="80rpx" type="green" shape bold shadow  @click="closePopup">关闭</tui-button>
+					</view>
 				</fui-bottom-popup>
-			<!-- 		<u-popup :show="popupShow" @close="close" :customStyle="{height: '200rpx'}" :zIndex="9999999999999" safeAreaInsetBottom round="20">
-			            <view style="height: 500rpx;padding: 30rpx;">
-						
-			               <tui-dropdown-list :show="dropdownShow" :top="94" :height="500">
-			                	<template v-slot:selectionbox>
-			                		<view class="" >
-										<tui-row marginBottom="10px" :isFlex="true" justify="space-around" :gutter ="0">
-											<tui-col>
-												<view class="tui-col__demo tui-yellow">ssss</view>
-											</tui-col>
-											<tui-col>
-												<view class="" @click="openSelect" style="float: right;padding: 10rpx 40rpx;border: 1px solid #eee;text-align: center;">
-													{{model}}bb
-												</view>
-											</tui-col>
-										</tui-row>
-			                			
-			                		</view>
-			                	</template>
-			                	<template v-slot:dropdownbox style="">
-			                		<view class="" style="">
-										<tui-row marginBottom="10px" :isFlex="true" justify="space-around" :gutter ="30">
-											<tui-col>
-												
-											</tui-col>
-											<tui-col>
-												<view class="" style="position: absolute;right: 0;">
-													
-														sasapshsasasass
-												
-												</view>
-											</tui-col>
-										</tui-row>
-			                			
-			                		</view>
-			                	</template>
-			                </tui-dropdown-list>
-							<tui-dropdown-list :show="dropdownShow" :top="94" :height="500">
-							 	<template v-slot:selectionbox>
-							 		<view class="" >
-										<tui-row marginBottom="10px" :isFlex="true" justify="space-around" :gutter ="0">
-											<tui-col>
-												<view class="tui-col__demo tui-yellow">ssss</view>
-											</tui-col>
-											<tui-col>
-												<view class="" @click="openSelect" style="float: right;padding: 10rpx 40rpx;border: 1px solid #eee;text-align: center;">
-													{{model}}bb
-												</view>
-											</tui-col>
-										</tui-row>
-							 			
-							 		</view>
-							 	</template>
-							 	<template v-slot:dropdownbox style="">
-							 		<view class="" style="">
-																	<tui-row marginBottom="10px" :isFlex="true" justify="space-around" :gutter ="30">
-																		<tui-col>
-																			
-																		</tui-col>
-																		<tui-col>
-																			<view class="" style="position: absolute;right: 0;">
-																				
-																					sasapshsasasass
-																			
-																			</view>
-																		</tui-col>
-																	</tui-row>
-							 			
-							 		</view>
-							 	</template>
-							 </tui-dropdown-list>
-			            </view>
-					</u-popup> -->
-					<u-button @click="show = true">打开</u-button>
+				
+				</view>
+				<view class="" v-if="isLogin == false">
+					<view class="sssss" >
+						<view class="" style="margin-top: 50vh;display: flex;justify-content: center;">
+							<tui-button width="220rpx" @click="toLogin">登录</tui-button>
+						</view>
+					</view>
 				</view>
 		</view>
 	
@@ -294,8 +212,14 @@ export default{
 			choModel: ['text-ada-001','text-babbage-001','text-curie-001','text-davinci-003'],
 			dropdownShowForModel: false,
 			dropdownShowForToken: false,
-			popupShow: false
-			
+			popupShow: false,
+			chooseToken: 2000,
+			inputToken: '',
+			tokens: [
+				{desc: '弱鸡一个',num: 7},
+				{desc: '还行', num: 1000},
+				{desc: '貌似牛X',num: 2000}
+			]
 		}
 	},
 	components:{
@@ -350,6 +274,21 @@ export default{
 		return false
 	},
 	methods: {
+		customTokenInput() {
+			this.chooseToken = this.inputToken
+			this.inputToken = ''
+			this.dropdownShowForToken = false
+		},
+		customToken(e) {
+			console.log(e.detail.value,'e')
+			this.inputToken = parseInt(e.detail.value)
+		},
+		changeToken(index) {
+			console.log(index,'changeModel')
+			console.log(this.choModel[index],'hhh')
+			this.chooseToken = this.tokens[index].num
+			this.dropdownShowForToken = false
+		},
 		changeModel(index) {
 			console.log(index,'changeModel')
 			console.log(this.choModel[index],'hhh')
@@ -423,11 +362,9 @@ export default{
 		// 发送消息
 		send(){
 		this.initScrollBar()
-
 			this.pushMessage(this.content, 'text', ()=>{
 				this.content = ''
 			})
-			
 		},
 		// 推送消息
 		pushMessage(content, type='text', cb=()=>{}){
@@ -471,7 +408,7 @@ export default{
 					data: {
 						"model": this.model,
 						"prompt": content,
-						  "max_tokens": 2500,
+						  "max_tokens": this.chooseToken,
 					},
 					success: (res) => {
 						console.log('content:', content);
@@ -535,6 +472,7 @@ export default{
 		background: rgba(255, 255, 255, 0.7);
 		backdrop-filter: blur(20px);
 		z-index: 9999999;
+		top: 0;
 	}
 	.flex-row{
 		display: flex;
@@ -582,7 +520,7 @@ export default{
 	backdrop-filter: blur(20px);
 	
 	.input{
-		height: 88rpx;
+		height: 68rpx;
 		line-height: 88upx;
 		padding: 0 20rpx;
 		font-size: 28upx;
@@ -598,7 +536,7 @@ export default{
 	.btn{
 		color: #fff;
 		width: 140upx;
-		height: 88upx;
+		height: 68upx;
 		font-size: 24upx;
 		line-height: 88upx;
 		text-align: center;
