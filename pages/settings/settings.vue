@@ -157,6 +157,8 @@
 					icon: 'success',
 					title: '删除成功'
 				})
+				this.showModelActionForCLear = false
+				this.key = ''
 			},
 			changeDefaultModel(model) {
 				console.log(model,'model')
