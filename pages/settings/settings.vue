@@ -211,7 +211,7 @@
 
 <style lang="scss">
 	page {
-		background-color: #eee;
+		background-color: #f3f3f3;
 	}
 	.u-page {
 		padding: 0;
