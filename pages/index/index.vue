@@ -150,8 +150,8 @@
 				
 				</view>
 				<view class="" v-if="isLogin == false">
-					<view class="sssss" >
-						<view class="" style="margin-top: 50vh;display: flex;justify-content: center;">
+					<view class="sssss" style="height: 100%;display: flex;justify-content: center;">
+						<view class="" style="margin-top: 50vh;">
 							<tui-button width="220rpx" @click="toLogin">登录</tui-button>
 						</view>
 					</view>
